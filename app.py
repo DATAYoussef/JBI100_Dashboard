@@ -12,6 +12,7 @@ from dash.dependencies import Input, Output
 
 if __name__ == '__main__':
     # Create data
+    df_iris = px.data.iris()
     df = pd.read_pickle('jbi100_app/views/AB_data_withGeo.pickle')
 
     # BEGIN
@@ -34,7 +35,7 @@ if __name__ == '__main__':
 
     # Instantiate custom views
     # scatterplot1 = Scatterplot("Scatterplot 1", 'sepal_length', 'sepal_width', df)
-    scatterplot2 = Scatterplot("Scatterplot 2", 'petal_length', 'petal_width', df)
+    scatterplot2 = Scatterplot("Scatterplot 2", 'petal_length', 'petal_width', df_iris)
 
     app.layout = html.Div(
         id="app-container",
