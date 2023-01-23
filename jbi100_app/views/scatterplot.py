@@ -95,3 +95,31 @@ class ChoroplethMapbox(html.Div):
                                    mapbox_style="carto-positron", zoom=9)
         return self.fig
 
+
+class Scatter_geo(html.Div):
+    def __init__(self,name,df,color,size,type = None,place = None):
+        self.html_id = name.lower().replace(" ", "-")
+        self.color = color
+        self.size = size
+        self.type = type
+        self.place = place
+        self.df = df
+####### If you wanna filter the scatter plot by province and neighbour hood
+
+
+
+        super().__init__(
+            className="graph_card",
+            children=[
+                html.H6(name),
+                dcc.Graph(id=self.html_id)
+            ],)
+
+    def update(self,selected_color = 0, selected_data = 0):
+        self.fig = px.scatter_mapbox(self.df, lat="lat", lon="long",
+                                color=self.color,
+                                zoom=10, height=750, size=self.size, size_max=8,
+                                mapbox_style='carto-positron',
+                                hover_data={'lat': False, 'long': False,
+                                            'total_price': True, 'review rate number': True})
+        return self.fig

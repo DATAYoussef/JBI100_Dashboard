@@ -1,6 +1,6 @@
 from jbi100_app.main import app
 from jbi100_app.views.menu import make_menu_layout
-from jbi100_app.views.scatterplot import Scatterplot, ChoroplethMapbox
+from jbi100_app.views.scatterplot import Scatterplot, ChoroplethMapbox,Scatter_geo
 
 import pandas as pd
 import json
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     # Instantiate custom views
     # scatterplot1 = Scatterplot("Scatterplot 1", 'sepal_length', 'sepal_width', df)
-    scatterplot2 = Scatterplot("Scatterplot 2", 'petal_length', 'petal_width', df_iris)
+    scatterplot2 = Scatter_geo("Scattergeo Price",df,"room type","review rate number")
 
     app.layout = html.Div(
         id="app-container",
