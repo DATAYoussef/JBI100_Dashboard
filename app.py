@@ -26,16 +26,26 @@ if __name__ == '__main__':
     # print(geojson)
     # print(AB_grouped)
 
-    # attributes = ["total_price", "availability 365", "review rate number", "minimum nights",
-    #               "calculated host listings count", "Construction year", "number of reviews"]
-    # for attr in attributes:
+
+
     scatterplot1 = ChoroplethMapbox("ChoroplethMapbox Price", df_grouped, geojson)
-    # scatterplot1.show()
-    # END
 
     # Instantiate custom views
-    # scatterplot1 = Scatterplot("Scatterplot 1", 'sepal_length', 'sepal_width', df)
     scatterplot2 = Scatter_geo("Scattergeo Price",df,"room type","review rate number")
+
+    # preperation for radar plot:
+    grouped_province = df.groupby(['neighbourhood group']).agg(
+        {'total_price': 'mean', 'availability 365': 'mean', 'instant_bookable': 'count', 'minimum nights': 'mean',
+         "review rate number": 'mean'})
+    instant_bookable = {}
+    for key, item in grouped_province:
+        true = len(item[item['instant_bookable'] == True])
+        ratio = (true / len(item)) * 100
+        print(true, ratio)
+        instant_bookable[key] = ratio
+
+
+
 
     app.layout = html.Div(
         id="app-container",
@@ -62,19 +72,19 @@ if __name__ == '__main__':
     # Define interactions
     @app.callback(
         Output(scatterplot1.html_id, "figure"), [
-        Input("select-color-scatter-1", "value"),
+        Input("select-attribute-chloro", "value"),
         Input(scatterplot2.html_id, 'selectedData')
     ])
-    def update_scatter_1(selected_color, selected_data):
-        return scatterplot1.update(selected_color, selected_data)
+    def update_scatter_1(selected_attr, selected_data):
+        return scatterplot1.update(selected_attr, selected_data,)
 
     @app.callback(
         Output(scatterplot2.html_id, "figure"), [
-        Input("select-color-scatter-2", "value"),
+        Input("select-province-scattergeo", "value"),
         Input(scatterplot1.html_id, 'selectedData')
     ])
-    def update_scatter_2(selected_color, selected_data):
-        return scatterplot2.update(selected_color, selected_data)
+    def update_scatter_2(location,selected_data):
+        return scatterplot2.update(location,selected_data)
 
 
     app.run_server(debug=False, dev_tools_ui=False)

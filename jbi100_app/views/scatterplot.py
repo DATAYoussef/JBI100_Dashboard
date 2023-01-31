@@ -2,7 +2,6 @@ from dash import dcc, html
 import plotly.express as px
 import plotly.graph_objects as go
 
-
 class Scatterplot(html.Div):
     def __init__(self, name, feature_x, feature_y, df):
         self.html_id = name.lower().replace(" ", "-")
@@ -88,8 +87,8 @@ class ChoroplethMapbox(html.Div):
     #     mode='markers',
     #     marker_color='rgb(200,200,200)'
     # ))
-    def update(self, selected_color=0, selected_data=0):
-        self.fig = px.choropleth_mapbox(self.df, geojson=self.gjson, color='total_price',
+    def update(self, selected_attr, selected_data):
+        self.fig = px.choropleth_mapbox(self.df, geojson=self.gjson, color=selected_attr,
                                    locations="fitted_neighbourhood", featureidkey="properties.name",
                                    center={"lat": 40.7, "lon": -74},
                                    mapbox_style="carto-positron", zoom=9)
@@ -97,14 +96,11 @@ class ChoroplethMapbox(html.Div):
 
 
 class Scatter_geo(html.Div):
-    def __init__(self,name,df,color,size,type = None,place = None):
+    def __init__(self,name,df,color,size):
         self.html_id = name.lower().replace(" ", "-")
         self.color = color
         self.size = size
-        self.type = type
-        self.place = place
         self.df = df
-####### If you wanna filter the scatter plot by province and neighbour hood
 
 
 
@@ -115,11 +111,47 @@ class Scatter_geo(html.Div):
                 dcc.Graph(id=self.html_id)
             ],)
 
-    def update(self,selected_color = 0, selected_data = 0):
-        self.fig = px.scatter_mapbox(self.df, lat="lat", lon="long",
-                                color=self.color,
-                                zoom=10, height=750, size=self.size, size_max=8,
-                                mapbox_style='carto-positron',
-                                hover_data={'lat': False, 'long': False,
-                                            'total_price': True, 'review rate number': True})
+    def update(self,location = None, selected_data = None):
+        if location =='All Provinces':
+            self.fig = px.scatter_mapbox(self.df, lat="lat", lon="long",
+                                         color=self.color,
+                                         zoom=10, height=750, size=self.size, size_max=8,
+                                         mapbox_style='carto-positron',
+                                         hover_data={'lat': False, 'long': False,
+                                                     'total_price': True, 'review rate number': True})
+
+            return self.fig
+        else:
+            self.df = self.df[self.df['neighbourhood group'] == location]
+
+            self.fig = px.scatter_mapbox(self.df, lat="lat", lon="long",
+                                    color=self.color,
+                                    zoom=10, height=750, size=self.size, size_max=8,
+                                    mapbox_style='carto-positron',
+                                    hover_data={'lat': False, 'long': False,
+                                                'total_price': True, 'review rate number': True})
+
+            return self.fig
+
+
+class radarplot(html.Div):
+    def __init__(self,name,df,column,theta = 'neighbourhood group',):
+        self.html_id = name.lower().replace(" ", "-")
+        self.df = df
+        self.column = column
+        self.theta = theta
+
+        super().__init__(
+            className="graph_card",
+            children=[
+                html.H6(name),
+                dcc.Graph(id=self.html_id)
+            ],
+        )
+
+
+    def update(self,selected_attr):
+        self.fig =px.line_polar(self.df, r=selected_attr, theta='neighbourhood group', line_close=True,title=selected_attr.capitalize())
+        self.fig.update_traces(fill='toself')
+
         return self.fig
