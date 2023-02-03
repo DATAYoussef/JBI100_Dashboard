@@ -1,28 +1,12 @@
 from dash import dcc, html
-from ..config import color_list1, color_list2,provinces,attributes
-
-options2 = [{"label": i, "value": i} for i in provinces]
-radar_attr = ['total_price', 'availability 365', 'minimum nights', "review rate number"]
-radar_labels = [
-    {'label': 'Total price', 'value': 'total_price'},
-    {'label': 'Availability', 'value': 'availability 365'},
-    {'label': 'Minimum nights', 'value': 'minimum nights'},
-    {'label': 'Review rate', 'value': 'review rate number'}
-]
-choro_labels = [
-    {'label': 'Total price', 'value': 'total_price'},
-    {'label': 'Availability', 'value': 'availability 365'},
-    {'label': 'Minimum nights', 'value': 'minimum nights'},
-    {'label': 'Host listings', 'value': 'calculated host listings count'},
-    {'label': 'Number of reviews', 'value': 'number of reviews'},
-    {'label': 'Review rate', 'value': 'review rate number'}
-]
+from ..config import color_list1, color_list2,provinces,attributes,radar_attr,radar_labels,choro_labels
 
 def generate_description_card():
     """
 
     :return: A Div containing dashboard title & descriptions.
     """
+    ### Adding Heading and intro for Upper Left Column ###
     return html.Div(
         id="description-card",
         children=[
@@ -40,6 +24,8 @@ def generate_control_card():
 
     :return: A Div containing controls for graphs.
     """
+    ### Adding Dropdown Menus on Left Column ###
+
     return html.Div(
         id="control-card",
         children=[
