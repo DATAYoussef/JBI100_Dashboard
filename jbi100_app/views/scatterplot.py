@@ -119,29 +119,17 @@ class Scatter_geo(html.Div):
             ],)
 
     def update(self,location = "All Provinces", selected_data = df):
-        if location =='All Provinces':
-            self.fig = px.scatter_mapbox(selected_data, lat="lat", lon="long",
-                                         color=self.color,
-                                         zoom=10, height=750,
-                                         mapbox_style='carto-positron',
-                                         hover_data={'lat': False, 'long': False,
-                                                     'total_price': True, 'review rate number': True},
-                                         color_discrete_sequence=['dark green', 'red', 'light blue', 'grey']
+        self.fig = px.scatter_mapbox(selected_data, lat="lat", lon="long",
+                                     color=self.color,
+                                     zoom=10, height=750,
+                                     mapbox_style='carto-positron',
+                                     hover_data={'lat': False, 'long': False,
+                                                 'total_price': True, 'review rate number': True},
+                                     color_discrete_sequence=['dark green', 'red', 'light blue', 'grey']
                                          )
 
-            return self.fig
-        else:
-            self.df = self.df[self.df['neighbourhood group'] == location]
+        return self.fig
 
-            self.fig = px.scatter_mapbox(self.df, lat="lat", lon="long",
-                                    color=self.color,
-                                    zoom=10, height=750,
-                                    mapbox_style='carto-positron',
-                                    color_discrete_sequence=['dark green', 'red', 'light blue', 'grey'],
-                                    hover_data={'lat': False, 'long': False,
-                                                'total_price': True, 'review rate number': True})
-
-            return self.fig
 
 
 class Radarplot(html.Div):
@@ -180,20 +168,10 @@ class SPLOM(html.Div):
                 dcc.Graph(id=self.html_id)
             ], )
 
-    def update(self,location):
+    def update(self,location,selected_data):
         if location == "All Provinces":
-            self.fig = px.scatter_matrix(self.df,
+            self.fig = px.scatter_matrix(selected_data,
             dimensions=["total_price", "availability 365", "review rate number", "calculated host listings count", "number of reviews"],
             color="room type")
 
-            return self.fig
-
-        else:
-            self.df = self.df[self.df['neighbourhood group'] == location]
-
-            self.fig = px.scatter_matrix(self.df,
-                                         dimensions=["total_price", "availability 365", "review rate number",
-                                                     "calculated host listings count", "number of reviews"],
-                                         color="room type"
-                                         )
             return self.fig

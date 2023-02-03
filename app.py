@@ -86,6 +86,7 @@ if __name__ == '__main__':
             df_scatter = df[df['neighbourhood group'] == location]
             return scattergeo.update(location, df_scatter)
 
+
     ### RADAR INTERACTION ###
     @app.callback(
         Output(radarplot.html_id, "figure"), [
@@ -101,6 +102,10 @@ if __name__ == '__main__':
         Input("select-province-splom","value"),
         ])
     def update_splom(location):
-        return splom.update(location)
+        if location == 'All Provinces':
+            return splom.update(location, df)
+        else:
+            df_splom = df[df['neighbourhood group'] == location]
+            return splom.update(location, df_splom)
 
     app.run_server(debug=False, dev_tools_ui=False)
