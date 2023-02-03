@@ -1,5 +1,5 @@
 from dash import dcc, html
-from ..config import color_list1, color_list2,provinces,attributes,radar_attr,radar_labels,choro_labels
+from ..config import provinces,attributes,radar_attr,radar_labels,choro_labels
 
 def generate_description_card():
     """
