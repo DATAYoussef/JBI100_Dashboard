@@ -91,7 +91,8 @@ class ChoroplethMapbox(html.Div):
         self.fig = px.choropleth_mapbox(self.df, geojson=self.gjson, color=selected_attr,
                                    locations="fitted_neighbourhood", featureidkey="properties.name",
                                    center={"lat": 40.7, "lon": -74},
-                                   mapbox_style="carto-positron", zoom=9)
+                                   mapbox_style="carto-positron",
+                                   color_continuous_scale= "Greens", zoom=9)
         return self.fig
 
 
