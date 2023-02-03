@@ -10,7 +10,7 @@ df = data.get_data()
 
 
 
-### Class to plot ChoroplethMap ###
+### Class of plot ChoroplethMap ###
 class ChoroplethMapbox(html.Div):
     def __init__(self, name, df, gjson, feature_x=0, feature_y=0):
         self.html_id = name.lower().replace(" ", "-")
@@ -46,7 +46,7 @@ class ChoroplethMapbox(html.Div):
         return self.fig
 
 
-### Class to plot ScatterGeo ###
+### Class of plot ScatterGeo ###
 class Scatter_geo(html.Div):
     def __init__(self,name,df,color,size):
         self.html_id = name.lower().replace(" ", "-")
@@ -77,7 +77,7 @@ class Scatter_geo(html.Div):
         return self.fig
 
 
-### Class to plot Radar Plot ###
+### Class of plot Radar Plot ###
 class Radarplot(html.Div):
     def __init__(self,name,df,column,theta = 'neighbourhood group',):
         self.html_id = name.lower().replace(" ", "-")
@@ -101,7 +101,7 @@ class Radarplot(html.Div):
         return self.fig
 
 
-### Class to plot SPLOM ###
+### Class of plot SPLOM ###
 class SPLOM(html.Div):
     def __init__(self,name,df,color):
         self.html_id = name.lower().replace(" ", "-")
