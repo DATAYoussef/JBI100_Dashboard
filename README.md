@@ -64,19 +64,50 @@ Run this app locally with:
 ```
 You will get a http link, open this in your browser to see the results. You can edit the code in any editor (e.g. Visual Studio Code) and if you save it you will see the results in the browser.
 
-## Cleaning Process
+## Data preprocessing
 Every action of cleaning is perfomed in the cleaning.py file. After cleaning the nan values and unnecessary attributes the dataset has been saved as a pickle file to avoid running the cleaning file every time. There's also some dataset exploration code (like descriptive statistics) at the end of the file. Codes in cleaning.py can be uncommented to see what changes have been made in the dataset.
+We also added a column with assigned neighbourhoods to make the accommodations compatible with the geojson geometry. (neighbourhood_fitter.py)
+## Code written by ourselves and "borrowed" code
 
-## Important Files
-menu.py: Makes the front-end of the dashboard 
+### app.py
+We used the template code and made additions for our desired functionality and visualization.
+(Inherited initially from the framework)
 
-scatterplot.py: Classes of visual encodings are created and stored here
+### pre_processing folder
+Both files in this folder were written by us from scratch.
 
-data.py: imports the cleaned dataset from pickle file
+### config.py
+Written by ourselves. Holds out global configurations.
+(Inherited initially from the framework)
 
-main.py:
+### data.py
+Written by ourselves. Holds the function that loads the data.
+(Inherited initially from the framework)
 
-app.py: 
+### main.py
+Title changed to our desired title.
+(Inherited initially from the framework)
+
+#### menu.py
+Changed according to our values and added two new dropdown menus.
+(Inherited initially from the framework)
+
+### scatterplot.py
+Holds the definition of our plots (visualizations). Written by ourselves.
+(Inherited initially from the framework)
+
+### base.css
+Not changed and originates from the framework as well.
+
+### style.css
+Tweaked according to our preferred layout.
+(Inherited initially from the framework)
+
+### nyc-neighbourhoods.geo.json
+Retreived from an external source as additional data (snd3 repo). See resources.
+
 ## Resources
 
 * [Dash](https://dash.plot.ly/)
+* [snd3 repository](https://github.com/veltman/snd3)
+
