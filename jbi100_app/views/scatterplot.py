@@ -91,7 +91,9 @@ class ChoroplethMapbox(html.Div):
         self.fig = px.choropleth_mapbox(self.df, geojson=self.gjson, color=selected_attr,
                                    locations="fitted_neighbourhood", featureidkey="properties.name",
                                    center={"lat": 40.7, "lon": -74},
-                                   mapbox_style="carto-positron", zoom=9.5, height=750)
+                                   mapbox_style="carto-positron",
+                                   color_continuous_scale= "Greens",
+                                   zoom=9.5, height=750)
         return self.fig
 
 
@@ -112,17 +114,29 @@ class Scatter_geo(html.Div):
             ],)
 
     def update(self,location = None, selected_data = None):
-        self.fig = px.scatter_mapbox(selected_data, lat="lat", lon="long",
-                                     color=self.color,
-                                     zoom=10, height=750, size=self.size, size_max=8,
-                                     mapbox_style='carto-positron',
-                                     hover_data={'lat': False, 'long': False,
-                                                 'total_price': True, 'review rate number': True})
-        return self.fig
+        if location =='All Provinces':
+            self.fig = px.scatter_mapbox(self.df, lat="lat", lon="long",
+                                         color=self.color,
+                                         zoom=10, height=750, size=self.size, size_max=8,
+                                         mapbox_style='carto-positron',
+                                         hover_data={'lat': False, 'long': False,
+                                                     'total_price': True, 'review rate number': True})
+
+            return self.fig
+        else:
+            self.df = self.df[self.df['neighbourhood group'] == location]
+
+            self.fig = px.scatter_mapbox(self.df, lat="lat", lon="long",
+                                    color=self.color,
+                                    zoom=10, height=750, size=self.size, size_max=8,
+                                    mapbox_style='carto-positron',
+                                    hover_data={'lat': False, 'long': False,
+                                                'total_price': True, 'review rate number': True})
+
+            return self.fig
 
 
-
-class Radarplot(html.Div):
+class radarplot(html.Div):
     def __init__(self,name,df,column,theta = 'neighbourhood group',):
         self.html_id = name.lower().replace(" ", "-")
         self.df = df
@@ -138,7 +152,7 @@ class Radarplot(html.Div):
         )
 
 
-    def update(self,selected_attr = 'total_price'):
+    def update(self,selected_attr):
         self.fig =px.line_polar(self.df, r=selected_attr, theta='neighbourhood group', line_close=True,title=selected_attr.capitalize())
         self.fig.update_traces(fill='toself')
 
