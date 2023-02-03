@@ -51,7 +51,15 @@ def generate_control_card():
                 id="select-attribute-radar",
                 options=[{"label": i, "value": i} for i in radar_attr],
                 value=radar_attr[0],
+            ),
+            html.Br(),
+            html.Label("SPLOM Change Province"),
+            dcc.Dropdown(
+                id="select-province-splom",
+                options=[{"label": i, "value": i} for i in provinces],
+                value=provinces[0],
             )
+
         ], style={"textAlign": "float-left"}
     )
 
