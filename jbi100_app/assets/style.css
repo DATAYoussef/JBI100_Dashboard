@@ -11,12 +11,14 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    position: fixed;
 }
 
 #right-column {
     background-color: #f4f4f4;
     padding: 0rem 2rem;
     min-height: 100vh;
+    float: right;
 }
 
 h5 {
