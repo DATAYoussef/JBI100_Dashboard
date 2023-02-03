@@ -1,12 +1,9 @@
 from jbi100_app.main import app
 from jbi100_app.views.menu import make_menu_layout
-from jbi100_app.views.scatterplot import Scatterplot, ChoroplethMapbox,Scatter_geo,Radarplot,SPLOM
-
+from jbi100_app.views.scatterplot import ChoroplethMapbox,Scatter_geo,Radarplot,SPLOM
 import jbi100_app.data as data
-
 import pandas as pd
 import json
-
 from dash import html, dcc
 import plotly.express as px
 from dash.dependencies import Input, Output
@@ -14,7 +11,6 @@ from dash.dependencies import Input, Output
 
 if __name__ == '__main__':
     # Create data
-    df_iris = px.data.iris()
     df = data.get_data()
 
     # BEGIN
@@ -24,24 +20,21 @@ if __name__ == '__main__':
     df_grouped = df.groupby(['fitted_neighbourhood']).mean()
     df_grouped = df_grouped.reset_index()
 
-    # print(AB_data)
-    # print(geojson)
-    # print(AB_grouped)
 
-    # preperation for radar plot:
+    ### Grouping for radar plot: ###
     grouped_province = df.groupby(['neighbourhood group']).agg(
         {'total_price': 'mean', 'availability 365': 'mean', 'minimum nights': 'mean',
          "review rate number": 'mean'})
     grouped_province = grouped_province.reset_index()
 
-    ### plots ##
+    ### Adding plots by using classes from scatterplot.py ###
     chloropleth = ChoroplethMapbox("Attributes per Neighbourhood", df_grouped, geojson)
     scattergeo = Scatter_geo("Attributes per Listing", df, "room type", "review rate number")
     radarplot = Radarplot('Average of attribute per Province',grouped_province,'total_price')
     splom = SPLOM('Correlation between attributes', df, 'room type')
 
 
-
+    ### Setting Dash Layout ###
     app.layout = html.Div(
         id="app-container",
         children=[
