@@ -2,6 +2,8 @@ from dash import dcc, html
 from ..config import color_list1, color_list2,provinces,attributes
 
 options2 = [{"label": i, "value": i} for i in provinces]
+radar_attr = ['total_price', 'availability 365', 'minimum nights', "review rate number"]
+
 # options2[0] = {'label': 'All provinces', "value": True}
 
 
@@ -43,6 +45,13 @@ def generate_control_card():
                 options=[{"label": i, "value": i} for i in provinces],
                 value=provinces[0],
             ),
+            html.Br(),
+            html.Label("Radar Change Attribute"),
+            dcc.Dropdown(
+                id="select-attribute-radar",
+                options=[{"label": i, "value": i} for i in radar_attr],
+                value=radar_attr[0],
+            )
         ], style={"textAlign": "float-left"}
     )
 

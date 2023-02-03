@@ -1,6 +1,6 @@
 from jbi100_app.main import app
 from jbi100_app.views.menu import make_menu_layout
-from jbi100_app.views.scatterplot import Scatterplot, ChoroplethMapbox,Scatter_geo
+from jbi100_app.views.scatterplot import Scatterplot, ChoroplethMapbox,Scatter_geo,Radarplot
 
 import pandas as pd
 import json
@@ -28,21 +28,19 @@ if __name__ == '__main__':
 
 
 
-    scatterplot1 = ChoroplethMapbox("ChoroplethMapbox Price", df_grouped, geojson)
+    chloropleth = ChoroplethMapbox("ChoroplethMapbox Price", df_grouped, geojson)
 
     # Instantiate custom views
-    scatterplot2 = Scatter_geo("Scattergeo Price",df,"room type","review rate number")
+    scattergeo = Scatter_geo("Scattergeo Price", df, "room type", "review rate number")
 
     # preperation for radar plot:
     grouped_province = df.groupby(['neighbourhood group']).agg(
-        {'total_price': 'mean', 'availability 365': 'mean', 'instant_bookable': 'count', 'minimum nights': 'mean',
+        {'total_price': 'mean', 'availability 365': 'mean', 'minimum nights': 'mean',
          "review rate number": 'mean'})
-    instant_bookable = {}
-    for key, item in grouped_province:
-        true = len(item[item['instant_bookable'] == True])
-        ratio = (true / len(item)) * 100
-        print(true, ratio)
-        instant_bookable[key] = ratio
+    grouped_province = grouped_province.reset_index()
+
+    radarplot = Radarplot('Radar Plot',grouped_province,'total_price')
+    # , 'instant_bookable': 'count'
 
 
 
@@ -62,8 +60,9 @@ if __name__ == '__main__':
                 id="right-column",
                 className="nine columns",
                 children=[
-                    scatterplot1,
-                    scatterplot2
+                    chloropleth,
+                    scattergeo,
+                    radarplot
                 ],
             ),
         ],
@@ -71,20 +70,29 @@ if __name__ == '__main__':
 
     # Define interactions
     @app.callback(
-        Output(scatterplot1.html_id, "figure"), [
-        Input("select-attribute-chloro", "value"),
-        Input(scatterplot2.html_id, 'selectedData')
+        Output(chloropleth.html_id, "figure"), [
+        Input("select-attribute-chloro", "value")
     ])
-    def update_scatter_1(selected_attr, selected_data):
-        return scatterplot1.update(selected_attr, selected_data,)
+    def update_scatter_1(selected_attr):
+        return chloropleth.update(selected_attr)
+
 
     @app.callback(
-        Output(scatterplot2.html_id, "figure"), [
+        Output(scattergeo.html_id, "figure"), [
         Input("select-province-scattergeo", "value"),
-        Input(scatterplot1.html_id, 'selectedData')
     ])
-    def update_scatter_2(location,selected_data):
-        return scatterplot2.update(location,selected_data)
+    def update_scatter_2(location):
+        if location == 'All Provinces':
+            return scattergeo.update(location, df)
+        else:
+            df_scatter = df[df['neighbourhood group'] == location]
+            return scattergeo.update(location, df_scatter)
 
+    @app.callback(
+        Output(radarplot.html_id, "figure"), [
+        Input("select-attribute-radar", "value"),
+        ])
+    def update_radar(province):
+        return radarplot.update(province)
 
     app.run_server(debug=False, dev_tools_ui=False)
