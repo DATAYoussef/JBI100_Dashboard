@@ -1,6 +1,11 @@
 from dash import dcc, html
 import plotly.express as px
 import plotly.graph_objects as go
+import pandas as pd
+
+
+df = pd.read_pickle('jbi100_app/views/AB_data_withGeo.pickle')
+
 
 class Scatterplot(html.Div):
     def __init__(self, name, feature_x, feature_y, df):
@@ -113,27 +118,18 @@ class Scatter_geo(html.Div):
                 dcc.Graph(id=self.html_id)
             ],)
 
-    def update(self,location = None, selected_data = None):
-        if location =='All Provinces':
-            self.fig = px.scatter_mapbox(self.df, lat="lat", lon="long",
-                                         color=self.color,
-                                         zoom=10, height=750, size=self.size, size_max=8,
-                                         mapbox_style='carto-positron',
-                                         hover_data={'lat': False, 'long': False,
-                                                     'total_price': True, 'review rate number': True})
+    def update(self,location = "All Provinces", selected_data = df):
+        self.fig = px.scatter_mapbox(selected_data, lat="lat", lon="long",
+                                     color=self.color,
+                                     zoom=10, height=750,
+                                     mapbox_style='carto-positron',
+                                     hover_data={'lat': False, 'long': False,
+                                                 'total_price': True, 'review rate number': True},
+                                     color_discrete_sequence=['dark green', 'red', 'light blue', 'grey']
+                                         )
 
-            return self.fig
-        else:
-            self.df = self.df[self.df['neighbourhood group'] == location]
+        return self.fig
 
-            self.fig = px.scatter_mapbox(self.df, lat="lat", lon="long",
-                                    color=self.color,
-                                    zoom=10, height=750, size=self.size, size_max=8,
-                                    mapbox_style='carto-positron',
-                                    hover_data={'lat': False, 'long': False,
-                                                'total_price': True, 'review rate number': True})
-
-            return self.fig
 
 
 class Radarplot(html.Div):
@@ -157,3 +153,25 @@ class Radarplot(html.Div):
         self.fig.update_traces(fill='toself')
 
         return self.fig
+
+
+class SPLOM(html.Div):
+    def __init__(self,name,df,color):
+        self.html_id = name.lower().replace(" ", "-")
+        self.color = color
+        self.df = df
+
+        super().__init__(
+            className="graph_card",
+            children=[
+                html.H6(name),
+                dcc.Graph(id=self.html_id)
+            ], )
+
+    def update(self,location,selected_data):
+        if location == "All Provinces":
+            self.fig = px.scatter_matrix(selected_data,
+            dimensions=["total_price", "availability 365", "review rate number", "calculated host listings count", "number of reviews"],
+            color="room type")
+
+            return self.fig

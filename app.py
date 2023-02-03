@@ -1,6 +1,6 @@
 from jbi100_app.main import app
 from jbi100_app.views.menu import make_menu_layout
-from jbi100_app.views.scatterplot import Scatterplot, ChoroplethMapbox,Scatter_geo,Radarplot
+from jbi100_app.views.scatterplot import Scatterplot, ChoroplethMapbox,Scatter_geo,Radarplot,SPLOM
 
 import pandas as pd
 import json
@@ -26,22 +26,17 @@ if __name__ == '__main__':
     # print(geojson)
     # print(AB_grouped)
 
-
-
-    chloropleth = ChoroplethMapbox("ChoroplethMapbox Price", df_grouped, geojson)
-
-    # Instantiate custom views
-    scattergeo = Scatter_geo("Scattergeo Price", df, "room type", "review rate number")
-
     # preperation for radar plot:
     grouped_province = df.groupby(['neighbourhood group']).agg(
         {'total_price': 'mean', 'availability 365': 'mean', 'minimum nights': 'mean',
          "review rate number": 'mean'})
     grouped_province = grouped_province.reset_index()
 
+    ### plots ##
+    chloropleth = ChoroplethMapbox("ChoroplethMapbox Price", df_grouped, geojson)
+    scattergeo = Scatter_geo("Scattergeo Price", df, "room type", "review rate number")
     radarplot = Radarplot('Radar Plot',grouped_province,'total_price')
-    # , 'instant_bookable': 'count'
-
+    splom = SPLOM('SPLOM', df, 'room type')
 
 
 
@@ -62,13 +57,15 @@ if __name__ == '__main__':
                 children=[
                     chloropleth,
                     scattergeo,
-                    radarplot
+                    radarplot,
+                    splom
                 ],
             ),
         ],
     )
 
-    # Define interactions
+
+    ### CHLOROPLETH INTERACTION ###
     @app.callback(
         Output(chloropleth.html_id, "figure"), [
         Input("select-attribute-chloro", "value")
@@ -77,6 +74,7 @@ if __name__ == '__main__':
         return chloropleth.update(selected_attr)
 
 
+    ### SCATTERGEO INTERACTION ###
     @app.callback(
         Output(scattergeo.html_id, "figure"), [
         Input("select-province-scattergeo", "value"),
@@ -88,11 +86,26 @@ if __name__ == '__main__':
             df_scatter = df[df['neighbourhood group'] == location]
             return scattergeo.update(location, df_scatter)
 
+
+    ### RADAR INTERACTION ###
     @app.callback(
         Output(radarplot.html_id, "figure"), [
         Input("select-attribute-radar", "value"),
         ])
     def update_radar(province):
         return radarplot.update(province)
+
+
+    ### SPLOM INTERACTION ###
+    @app.callback(
+        Output(splom.html_id, "figure"),[
+        Input("select-province-splom","value"),
+        ])
+    def update_splom(location):
+        if location == 'All Provinces':
+            return splom.update(location, df)
+        else:
+            df_splom = df[df['neighbourhood group'] == location]
+            return splom.update(location, df_splom)
 
     app.run_server(debug=False, dev_tools_ui=False)
