@@ -29,28 +29,28 @@ def generate_control_card():
     return html.Div(
         id="control-card",
         children=[
-            html.Label("ChoroplethMap Attribute"),
+            html.Label("ChoroplethMap Attributes"),
             dcc.Dropdown(
                 id="select-attribute-chloro",
                 options=choro_labels,
                 value=attributes[0],
             ),
             html.Br(),
-            html.Label("Scattergeo Neighbourhood group"),
+            html.Label("Scattergeo Provinces"),
             dcc.Dropdown(
                 id="select-province-scattergeo",
                 options=[{"label": i, "value": i} for i in provinces],
                 value=provinces[0],
             ),
             html.Br(),
-            html.Label("Radar Attribute"),
+            html.Label("Radar Attributes"),
             dcc.Dropdown(
                 id="select-attribute-radar",
                 options=radar_labels,
                 value=radar_attr[0],
             ),
             html.Br(),
-            html.Label("SPLOM Neighbourhood group"),
+            html.Label("SPLOM Provinces"),
             dcc.Dropdown(
                 id="select-province-splom",
                 options=[{"label": i, "value": i} for i in provinces],

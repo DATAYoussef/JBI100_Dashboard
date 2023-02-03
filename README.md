@@ -64,6 +64,19 @@ Run this app locally with:
 ```
 You will get a http link, open this in your browser to see the results. You can edit the code in any editor (e.g. Visual Studio Code) and if you save it you will see the results in the browser.
 
+## Cleaning Process
+Every action of cleaning is perfomed in the cleaning.py file. After cleaning the nan values and unnecessary attributes the dataset has been saved as a pickle file to avoid running the cleaning file every time. There's also some dataset exploration code (like descriptive statistics) at the end of the file. Codes in cleaning.py can be uncommented to see what changes have been made in the dataset.
+
+## Important Files
+menu.py: Makes the front-end of the dashboard 
+
+scatterplot.py: Classes of visual encodings are created and stored here
+
+data.py: imports the cleaned dataset from pickle file
+
+main.py:
+
+app.py: 
 ## Resources
 
 * [Dash](https://dash.plot.ly/)
