@@ -136,7 +136,7 @@ class Scatter_geo(html.Div):
             return self.fig
 
 
-class radarplot(html.Div):
+class Radarplot(html.Div):
     def __init__(self,name,df,column,theta = 'neighbourhood group',):
         self.html_id = name.lower().replace(" ", "-")
         self.df = df
