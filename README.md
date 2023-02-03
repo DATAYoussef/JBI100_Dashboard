@@ -1,8 +1,8 @@
-# JBI100-example-app
+# NYC AirBnB Analysis
 
 ## About this app
 
-You can use this as a basic template for your JBI100 visualization project.
+Welcome to our dashboard. The goal of this dashboard is to be able to analyze data from AirBnB accommodations. The intended end-user is an host that has accommodations listed on the AirBnB website.
 
 ## Requirements
 
