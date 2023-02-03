@@ -126,6 +126,7 @@ class Scatter_geo(html.Div):
                                      color=self.color,
                                      zoom=10, height=750,
                                      mapbox_style='carto-positron',
+                                     labels={"room type": "Room type"},
                                      hover_data={'lat': False, 'long': False,
                                                  'total_price': True, 'review rate number': True},
                                      color_discrete_sequence=['dark green', 'red', 'light blue', 'grey']
@@ -152,7 +153,7 @@ class Radarplot(html.Div):
 
 
     def update(self,selected_attr):
-        self.fig =px.line_polar(self.df, r=selected_attr, theta='neighbourhood group', line_close=True,title=selected_attr.capitalize().replace('_', ' '))
+        self.fig =px.line_polar(self.df, r=selected_attr, theta='neighbourhood group', line_close=True,title=selected_attr.capitalize().replace('_', ' ').replace('3', '').replace('6', '').replace('5', ''))
         self.fig.update_traces(fill='toself')
 
         return self.fig
@@ -181,11 +182,14 @@ class SPLOM(html.Div):
                                      height=800,
                                      labels={
                                          "number of reviews": "# of reviews",
-                                         "calculated host listings count": "host listings count",
-                                         "review rate number": "review rate"
+                                         "calculated host listings count": "Host listings count",
+                                         "review rate number": "Review rate",
+                                         "availability 365": "Availability",
+                                         "room type": "Room type",
+                                         "total_price": "Total price"
                                      }
                                      )
         self.fig.update_traces(diagonal_visible = False)
-        self.fig.update_yaxes(tickangle=-45)
+        # self.fig.update_yaxes(tickangle=-45)
         return self.fig
 

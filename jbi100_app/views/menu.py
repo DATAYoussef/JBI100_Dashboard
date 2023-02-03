@@ -26,10 +26,10 @@ def generate_description_card():
     return html.Div(
         id="description-card",
         children=[
-            html.H5("JBI100-Group 69 Dashboard"),
+            html.H5("NYC AirBnB Analysis"),
             html.Div(
                 id="intro",
-                children="You can use dropdowns for changing the plots",
+                children="Welcome to our dashboard! We're group 69 from the JBI100 Visualization course. Our goal is to increase AirBnB host profitability."
             ),
         ],
     )
