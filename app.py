@@ -2,6 +2,8 @@ from jbi100_app.main import app
 from jbi100_app.views.menu import make_menu_layout
 from jbi100_app.views.scatterplot import Scatterplot, ChoroplethMapbox,Scatter_geo,Radarplot,SPLOM
 
+import jbi100_app.data as data
+
 import pandas as pd
 import json
 
@@ -13,7 +15,7 @@ from dash.dependencies import Input, Output
 if __name__ == '__main__':
     # Create data
     df_iris = px.data.iris()
-    df = pd.read_pickle('jbi100_app/views/AB_data_withGeo.pickle')
+    df = data.get_data()
 
     # BEGIN
     with open("jbi100_app/views/nyc-neighborhoods.geo.json", "r") as geojsonfile:
@@ -33,10 +35,10 @@ if __name__ == '__main__':
     grouped_province = grouped_province.reset_index()
 
     ### plots ##
-    chloropleth = ChoroplethMapbox("ChoroplethMapbox Price", df_grouped, geojson)
-    scattergeo = Scatter_geo("Scattergeo Price", df, "room type", "review rate number")
-    radarplot = Radarplot('Radar Plot',grouped_province,'total_price')
-    splom = SPLOM('SPLOM', df, 'room type')
+    chloropleth = ChoroplethMapbox("Attributes per Neighbourhood", df_grouped, geojson)
+    scattergeo = Scatter_geo("Attributes per Listing", df, "room type", "review rate number")
+    radarplot = Radarplot('Average of attribute per Province',grouped_province,'total_price')
+    splom = SPLOM('Correlation between attributes', df, 'room type')
 
 
 

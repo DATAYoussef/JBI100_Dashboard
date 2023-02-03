@@ -86,18 +86,21 @@ class ChoroplethMapbox(html.Div):
             ],
         )
 
-    # self.fig.add_trace(go.Scatter(
-    #     x=x_values,
-    #     y=y_values,
-    #     mode='markers',
-    #     marker_color='rgb(200,200,200)'
-    # ))
+
     def update(self, selected_attr):
         self.fig = px.choropleth_mapbox(self.df, geojson=self.gjson, color=selected_attr,
                                    locations="fitted_neighbourhood", featureidkey="properties.name",
                                    center={"lat": 40.7, "lon": -74},
                                    mapbox_style="carto-positron",
                                    color_continuous_scale= "Greens",
+                                   labels={
+                                    "total_price": "Total price",
+                                    "availability 365": "Availability",
+                                    "review rate number": "Review rate",
+                                    "minimum nights": "Minimum nights",
+                                    "number of reviews": "Number of reviews",
+                                    "calculated host listings count": "Host listings count"
+                                   },
                                    zoom=9.5, height=750)
         return self.fig
 
@@ -149,7 +152,7 @@ class Radarplot(html.Div):
 
 
     def update(self,selected_attr):
-        self.fig =px.line_polar(self.df, r=selected_attr, theta='neighbourhood group', line_close=True,title=selected_attr.capitalize())
+        self.fig =px.line_polar(self.df, r=selected_attr, theta='neighbourhood group', line_close=True,title=selected_attr.capitalize().replace('_', ' '))
         self.fig.update_traces(fill='toself')
 
         return self.fig
@@ -168,10 +171,21 @@ class SPLOM(html.Div):
                 dcc.Graph(id=self.html_id)
             ], )
 
-    def update(self,location,selected_data):
-        if location == "All Provinces":
-            self.fig = px.scatter_matrix(selected_data,
-            dimensions=["total_price", "availability 365", "review rate number", "calculated host listings count", "number of reviews"],
-            color="room type")
 
-            return self.fig
+    def update(self,location,selected_data):
+
+        self.fig = px.scatter_matrix(selected_data,
+                                     dimensions=["total_price", "availability 365","review rate number",
+                                                 "calculated host listings count", "number of reviews"],
+                                     color="room type",
+                                     height=800,
+                                     labels={
+                                         "number of reviews": "# of reviews",
+                                         "calculated host listings count": "host listings count",
+                                         "review rate number": "review rate"
+                                     }
+                                     )
+        self.fig.update_traces(diagonal_visible = False)
+        self.fig.update_yaxes(tickangle=-45)
+        return self.fig
+
